@@ -2,9 +2,9 @@ import crawlers
 import json
 
 if __name__ == '__main__':
-  crawler = crawlers.CineramaCrawler()
+  crawler = crawlers.CinestarCrawler()
   crawler.getTheaters()
   crawler.getMovies()
-  js = json.dump(crawler.model.toJSON(), open('cinerama.json', 'w'))
+  js = json.dump(crawler.model.toJSON(), open('cinestar.json', 'w'))
 
 

@@ -2,6 +2,7 @@ from . import base
 from os import path
 from .lib import schemas
 from .lib import utils
+import json
 
 class CinepolisCrawler(base.BaseCrawler):
   def __init__(self):
@@ -12,16 +13,16 @@ class CinepolisCrawler(base.BaseCrawler):
 
   def getTheaters(self):
     self.log('get-theaters')
-    jsonCity = self.doRequest(self.url).json()
-    # jsonCity = json.load(open('../test-files/cinepolis-json-1.json'))
+    # jsonCity = self.doRequest(self.url).json()
+    jsonCity = json.load(open('../test-files/cinepolis-json-1.json'))
 
     cinemas = []
 
     for obj in jsonCity:
       payload = {"claveCiudad": obj['Clave'], "esVIP": False}
       url = path.join(self.base_url, 'Cartelera.aspx/GetNowPlayingByCity')
-      jsonCinemas = self.doRequest(url, method='post', json=payload).json()
-      # jsonCinemas = json.load(open('../test-files/cinepolis-json-2.json'))
+      # jsonCinemas = self.doRequest(url, method='post', json=payload).json()
+      jsonCinemas = json.load(open('../test-files/cinepolis-json-2.json'))
       cinemas.extend(jsonCinemas['d']['Cinemas'])
     
     for cinema in cinemas:
@@ -31,10 +32,8 @@ class CinepolisCrawler(base.BaseCrawler):
     for theater in self.model.theaters:
       self.log('get-movies-for-theater: %s' % theater.name)
       for dateDetail in theater.storage['Dates']:
-        
         if utils.cinepolis_today() != dateDetail['ShowtimeDate']:
           continue
-
         for movieDetail in dateDetail['Movies']:
           showTimes = []
           meta = {}
@@ -48,6 +47,4 @@ class CinepolisCrawler(base.BaseCrawler):
           title = movieDetail['Title']
 
           theater.addMovie(title, None, showTimes, meta)
-          
-          
 
