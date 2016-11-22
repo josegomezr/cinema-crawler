@@ -10,7 +10,7 @@ class CineramaCrawler(base.BaseCrawler):
     self.model = schemas.Chain('cinerama', self.url)
 
   def getTheaters(self):
-    soup = self.makeBS4(self.url)
+    soup = self.urlToBS4(self.url)
     self.log('get-theaters')
     for i in soup.select('p.titulo-tienda'):
       name = i.next.next.strip()
@@ -21,7 +21,7 @@ class CineramaCrawler(base.BaseCrawler):
     self.log('get-movies')
     for theater in self.model.theaters:
       self.log('get-movies-for-theater: %s' % theater.name)
-      soup = self.makeBS4(theater.url)
+      soup = self.urlToBS4(theater.url)
       for movieDetail in soup.select('div.txt-cartelera'):
         title = movieDetail.select_one('div.titcarte').a.string
         description = movieDetail.select_one('p').string

@@ -20,11 +20,16 @@ class BaseCrawler(object):
     '''This will fetch all movies for each theater'''
     raise Exception("not implemented yet")
 
-  def makeBS4(self, url, **kwargs):
+  def urlToBS4(self, url, **kwargs):
     '''This make a bs4 object from an http request
     @returns bs4.BeautifulSoup'''
     response = self.doRequest(url, **kwargs).text
     return BeautifulSoup(response, 'html.parser')
+
+  def makeBS4(self, html_doc):
+    '''This make a bs4 object from a string
+    @returns bs4.BeautifulSoup'''
+    return BeautifulSoup(html_doc, 'html.parser')
   
   def doRequest(self, url, **kwargs):
     '''This make an http request and return a 
