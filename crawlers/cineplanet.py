@@ -10,46 +10,45 @@ class CineplanetCrawler(base.BaseCrawler):
     self.base_url = 'https://cineplanet.com.pe/'
     self.url = path.join(self.base_url, '')
     self.model = schemas.Chain('cineplanet', self.url)
+    self.headers = {
+      'user-agent':  "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 " + \
+                     "(KHTML, like Gecko) Chrome/54.0.2840.90 Safari/537.36"
+      }
 
   def getTheaters(self):
     self.log('get-theaters')
-    # jsonCity = self.doRequest(self.url).json()
-    soup = self.makeBS4(open('../test-files/cineplanet-main.html').read())
+    # soup = self.makeBS4(open('../test-files/cineplanet-main.html').read())
+    
+    soup = self.urlToBS4(self.url, headers = self.headers)
 
     chain = []
 
+    # all cities
     for item in soup.select_one('.WEB_CONTE_menu').select('li')[4].select('li'):
-      chain.append( [item.a.text, item.a['href']] )
-      break
+      chain.append( item.a['href'] )
     
+    # from each city
     for city in chain:
+      # soup = self.makeBS4(open('../test-files/cineplanet-ciudad.html').read())
 
-      soup = self.makeBS4(open('../test-files/cineplanet-ciudad.html').read())
+      soup = self.urlToBS4("%s%s" % (self.base_url, city), headers = self.headers)
+      # get all theater
       for item in soup.select('.WEB_cineListadoItem'):
         name = item.select_one('.WEB_cineListadoNombre').a.text
         href = item.select_one('.WEB_cineListadoNombre').a['href']
-        href = path.join(self.url, href)
+        href = self.url+href
         self.model.addTheater( name, href )
-
     
   def getMovies(self):
+    # from each theater
     for theater in self.model.theaters:
-      theater.url 
-      # self.log('get-movies-for-theater: %s' % theater.name)
-      # for dateDetail in theater.storage['Dates']:
-      #   if utils.cinepolis_today() != dateDetail['ShowtimeDate']:
-      #     continue
-      #   for movieDetail in dateDetail['Movies']:
-      #     showTimes = []
-      #     meta = {}
-      #     for movieFormatDetail in movieDetail['Formats']:
-      #       meta['format'] = movieFormatDetail['Name']
-      #       meta['language'] = movieFormatDetail['Language']
-      #       for showTimeDetail in movieFormatDetail['Showtimes']:
-      #         showTimes.append(showTimeDetail['Time'])
-      #     meta['rating'] = movieDetail['Rating']
-      #     meta['poster'] = movieDetail['Poster']
-      #     title = movieDetail['Title']
+      # get all movies
+      self.log('get-movies-for-theater: %s' % theater.name)
+      soup = self.urlToBS4(theater.url, headers = self.headers)
+      # soup = self.makeBS4(open('../test-files/cineplanet-cine.html').read())
+      for movieSoup in soup.select(".WEB_cineCarteleraDetalle"):
+        title = movieSoup.select_one('.WEB_cinePeliculaNombre').next
+        showtimes = [ i.text for i in movieSoup.select('.horarioDisponible') ]
+        print (showtimes)
 
-      #     theater.addMovie(title, None, showTimes, meta)
-
+        theater.addMovie(title, None, showtimes )

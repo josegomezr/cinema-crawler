@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 import logging
+i = 1
 
 class BaseCrawler(object):
   '''base class for crawlers'''
@@ -23,12 +24,13 @@ class BaseCrawler(object):
   def urlToBS4(self, url, **kwargs):
     '''This make a bs4 object from an http request
     @returns bs4.BeautifulSoup'''
-    response = self.doRequest(url, **kwargs).text
-    return BeautifulSoup(response, 'html.parser')
+    response = self.doRequest(url, **kwargs)
+    return self.makeBS4(response.text)
 
   def makeBS4(self, html_doc):
     '''This make a bs4 object from a string
     @returns bs4.BeautifulSoup'''
+    open('debug-%i.log' % i, 'w').write(html_doc)
     return BeautifulSoup(html_doc, 'html.parser')
   
   def doRequest(self, url, **kwargs):
@@ -53,7 +55,7 @@ class BaseCrawler(object):
 
         self.log('successful-http-request')
         return response
-      except requests.exceptions.ContentDecodingError:
+      except (requests.exceptions.ContentDecodingError, requests.exceptions.ConnectionError):
         self.log('failed-http-request')
         retries = retries -1
     raise Exception("Network Error")
