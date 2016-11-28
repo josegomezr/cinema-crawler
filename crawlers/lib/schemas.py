@@ -1,3 +1,4 @@
+from . import utils
 class Chain:
   def __init__(self, name, url):
     self.name = name
@@ -19,8 +20,10 @@ class Theater:
     self.url = url
     self.movies = []
     self.storage = storage
+
   def addMovie(self, name, description, showtimes, meta={}):
     self.movies.append(Movie(name, description, showtimes, **meta))
+
   def toJSON(self):
     return {
       'name': self.name,
@@ -32,6 +35,7 @@ class Movie:
     self.name = name
     self.showtimes = [ShowTime(i) for i in showtimes]
     self.meta = kwargs
+
   def toJSON(self):
     return {
       'name': self.name,
@@ -39,8 +43,12 @@ class Movie:
       'meta': self.meta
     }
 
+  def __eq__(self, rhs):
+    return utils.clean_tags_from_title(self.name) == utils.clean_tags_from_title(rhs.name)
+
 class ShowTime:
   def __init__(self, showtime):
     self.showtime = showtime
+
   def toJSON(self):
     return self.showtime
