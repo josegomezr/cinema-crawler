@@ -11,8 +11,8 @@ class UVKMultiCineCrawler(base.BaseCrawler):
     self.model = schemas.Chain(self.name, self.url)
 
   def getTheaters(self):
-    # soup = self.urlToBS4(self.url)
-    soup = self.makeBS4(open('../test-files/uvk-cines.html'))
+    soup = self.urlToBS4(self.url)
+    # soup = self.makeBS4(open('../test-files/uvk-cines.html'))
 
     for theaterSoup in soup.select("table table table table"):
       if not theaterSoup.select_one('h3'):
@@ -27,7 +27,6 @@ class UVKMultiCineCrawler(base.BaseCrawler):
       self.model.addTheater(title, url)
 
   def getMovies(self):
-
     url = path.join(self.base_url, 'cartelera/')
     # soup = self.makeBS4(open('../test-files/uvk-movies.html'))
     soup = self.urlToBS4(url)
@@ -42,11 +41,12 @@ class UVKMultiCineCrawler(base.BaseCrawler):
       
       description = movieSoup.select_one('p').next.next.next.next.next.strip()
 
-      metas = [meta.next for meta in movieSoup.select('div.version')]
-      metas = [meta.strip().replace('Versión: ', '').replace(' |', '').replace('.', '') for meta in metas]
-      
-      metas = { k: True for k in metas}
-
+      metas = {}
+      for metaSoup in movieSoup.select('div.version'):
+        meta = metaSoup.next 
+        meta = ' '.join(meta.strip().split(' ')[1:-1])
+        for submeta in meta.split(' - '):
+          metas[submeta.strip()] = True
 
       movies[key] = {
         'titulo': name,
@@ -57,11 +57,16 @@ class UVKMultiCineCrawler(base.BaseCrawler):
 
     for href, movieDict in movies.items():
       url = path.join(self.base_url, href)
-      soup = self.urlToBS4(url)
-      #movieSoup = self.makeBS4(open('../test-files/uvk-detail-movie.html'))
+      movieSoup = self.urlToBS4(url)
+      # movieSoup = self.makeBS4(open('../test-files/uvk-detail-movie.html'))
       cinemas = movieSoup.select("table table table table table")[1].select('a')
 
       for theater in self.model.theaters:
         for cinema in cinemas:
           if cinema['href'] == theater.url:
-            theater.addMovie(name, description, [], metas)
+            theater.addMovie(
+              movieDict['titulo'], 
+              movieDict['description'], 
+              [], 
+              movieDict['meta']
+            )

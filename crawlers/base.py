@@ -30,7 +30,9 @@ class BaseCrawler(object):
   def makeBS4(self, html_doc):
     '''This make a bs4 object from a string
     @returns bs4.BeautifulSoup'''
-    open('debug-%i.log' % i, 'w').write(str(html_doc))
+    global i
+    open('./tmp/%s-%i.log' % (self.name, i), 'w').write(str(html_doc))
+    i = i +1
     return BeautifulSoup(html_doc, 'html.parser')
   
   def doRequest(self, url, **kwargs):
