@@ -15,8 +15,13 @@ class CrawlerThread (threading.Thread):
         print ("Starting ", self.threadID)
         self.instance.getTheaters()
         self.instance.getMovies()
+        
         with open('tmp/pickle-%s.dump' % self.threadID, 'wb') as f:
           pickle.dump(self.instance.model, f, protocol=4)
+        
+        with open('tmp/json-%s.json' % self.threadID, 'w') as f:
+            json.dump(self.instance.model.toJSON(), f)
+
         print ("Exiting ", self.threadID)
 
 if __name__ == '__main__':

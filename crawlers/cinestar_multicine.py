@@ -6,7 +6,7 @@ from .lib import utils
 
 class CinestarCrawler(base.BaseCrawler):
   def __init__(self):
-    super(CinestarCrawler, self).__init__('cinerama')
+    super(CinestarCrawler, self).__init__('cinestar')
     self.base_url = 'http://www.cinestar.com.pe/'
     self.url = path.join(self.base_url, 'multicines')
     self.model = schemas.Chain('cinestar', self.url)

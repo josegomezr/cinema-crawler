@@ -6,7 +6,7 @@ from .lib import utils
 
 class MovieTimeCrawler(base.BaseCrawler):
   def __init__(self):
-    super(MovieTimeCrawler, self).__init__('cinerama')
+    super(MovieTimeCrawler, self).__init__('movietime')
     self.base_url = 'http://www.movietime.com.pe//'
     self.url = path.join(self.base_url, 'multicines')
     self.model = schemas.Chain('movietime', self.url)
