@@ -3,6 +3,7 @@ import json
 import pickle
 import threading
 import time
+import os
 
 result = {
   'chains': {},
@@ -68,6 +69,12 @@ class CrawlerThread (threading.Thread):
         print ("Exiting ", self.threadID)
 
 if __name__ == '__main__':
+
+  try:
+    os.mkdir('/tmp')
+  except FileExistsError:
+    pass
+
   crawlers = [
     crawlers.CinepolisCrawler(),
     crawlers.CineramaCrawler(),
