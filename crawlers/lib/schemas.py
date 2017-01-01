@@ -61,9 +61,7 @@ class Movie:
   def toJSON(self):
     return {
       'name': utils.clean_tags_from_title(self.name),
-      'showtimes': {
-        self.theater: [showtime.toJSON() for showtime in self.showtimes],
-      },
+      'showtimes': [showtime.toJSON() for showtime in self.showtimes],
       'theaters': [],
       'chains': [],
       'meta': self.meta

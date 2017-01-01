@@ -42,13 +42,16 @@ class CrawlerThread (threading.Thread):
 
           for movie in theater.movies:
             movieHash = hex(hash(movie))
-
+            movieJSON = movie.toJSON()
+            movieShowTimes = movieJSON['showtimes']
             if not result['movies'].get(movieHash):
-              result['movies'][movieHash] = movie.toJSON()         
+              movieJSON['showtimes'] = {}
+              result['movies'][movieHash] = movieJSON
 
             damovie = result['movies'][movieHash]
 
-            damovie['showtimes'][theaterHash] = movieShowTime
+
+            damovie['showtimes'][theaterHash] = movieShowTimes
 
             if not chainHash in damovie['chains']:
               damovie['chains'].append(chainHash)
