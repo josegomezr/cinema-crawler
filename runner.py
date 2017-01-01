@@ -35,13 +35,14 @@ class CrawlerThread (threading.Thread):
         chainHash = hex(hash(self.instance.model))
         result['chains'][chainHash] = self.instance.model.toJSON(False)
         
-        
+
 
 
         for theater in self.instance.model.theaters:
+          theaterHash = hex(hash(theater))
+
           print(theaterHash, theater.name)
 
-          theaterHash = hex(hash(theater))
           result['theaters'][theaterHash] = theater.toJSON(False)
 
           for movie in theater.movies:
@@ -72,9 +73,9 @@ class CrawlerThread (threading.Thread):
 if __name__ == '__main__':
   crawlers = [
     # crawlers.CinepolisCrawler(),
-    # crawlers.CineramaCrawler(),
+    crawlers.CineramaCrawler(),
     # crawlers.CinestarCrawler(),
-    crawlers.CineplanetCrawler(),
+    # crawlers.CineplanetCrawler(),
     # crawlers.MovieTimeCrawler(),
     # crawlers.MultiCineJMCrawler(),
     # crawlers.UVKMultiCineCrawler(),
