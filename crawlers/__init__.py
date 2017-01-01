@@ -6,3 +6,4 @@ from .movietime import MovieTimeCrawler
 from .multicine_jm import MultiCineJMCrawler
 from .uvk_multicine import UVKMultiCineCrawler
 from .cinemark import CinemarkCrawler
+
