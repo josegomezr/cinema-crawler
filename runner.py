@@ -4,8 +4,6 @@ import pickle
 import threading
 import time
 
-exitFlag = 0
-
 class CrawlerThread (threading.Thread):
     def __init__(self, threadID, instance):
         threading.Thread.__init__(self)

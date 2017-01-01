@@ -47,7 +47,7 @@ class CineplanetCrawler(base.BaseCrawler):
       soup = self.urlToBS4(theater.url, headers = self.headers)
       # soup = self.makeBS4(open('../test-files/cineplanet-cine.html').read())
       for movieSoup in soup.select(".WEB_cineCarteleraDetalle"):
-        title = movieSoup.select_one('.WEB_cinePeliculaNombre').next
+        title = str(movieSoup.select_one('.WEB_cinePeliculaNombre').next).strip()
         showtimes = [ i.text for i in movieSoup.select('.horarioDisponible') ]
         print (showtimes)
 

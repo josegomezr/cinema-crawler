@@ -38,13 +38,16 @@ class Movie:
 
   def toJSON(self):
     return {
-      'name': self.name,
+      'name': utils.clean_tags_from_title(self.name),
       'showtimes': [showtime.toJSON() for showtime in self.showtimes],
       'meta': self.meta
     }
 
   def __eq__(self, rhs):
     return utils.clean_tags_from_title(self.name) == utils.clean_tags_from_title(rhs.name)
+  
+  def __hash__(self):
+    return hash(utils.clean_tags_from_title(self.name).lower())
 
 class ShowTime:
   def __init__(self, showtime):
