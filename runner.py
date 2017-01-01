@@ -92,15 +92,15 @@ if __name__ == '__main__':
   movieID = 1
 
   for key, chain in result['chains'].items():
-    output = output.replace(chain, chainID)
+    output = output.replace(key, chainID)
     chainID = chainID + 1
 
   for key, theater in result['theaters'].items():
-    output = output.replace(theater, theaterID)
+    output = output.replace(key, theaterID)
     theaterID = theaterID + 1
 
   for key, movie in result['movies'].items():
-    output = output.replace(movie, movieID)
+    output = output.replace(key, movieID)
     movieID = movieID + 1
 
   with open('tmp/result.json', 'w') as f:
