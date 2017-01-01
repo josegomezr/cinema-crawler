@@ -28,20 +28,25 @@ class CrawlerThread (threading.Thread):
           pickle.dump(self.instance.model, f, protocol=4)
         
         with open('tmp/json-%s.json' % self.threadID, 'w') as f:
-            json.dump(self.instance.model.toJSON(), f)
+          json.dump(self.instance.model.toJSON(), f)
         
         Lock.acquire()
 
         chainHash = hex(hash(self.instance.model))
-
         result['chains'][chainHash] = self.instance.model.toJSON(False)
         
+        
+
+
         for theater in self.instance.model.theaters:
+          print(theaterHash, theater.name)
+
           theaterHash = hex(hash(theater))
           result['theaters'][theaterHash] = theater.toJSON(False)
 
           for movie in theater.movies:
             movieHash = hex(hash(movie))
+            print("--", movieHash, movie.name)
             movieJSON = movie.toJSON()
             movieShowTimes = movieJSON['showtimes']
             if not result['movies'].get(movieHash):
@@ -49,7 +54,6 @@ class CrawlerThread (threading.Thread):
               result['movies'][movieHash] = movieJSON
 
             damovie = result['movies'][movieHash]
-
 
             damovie['showtimes'][theaterHash] = movieShowTimes
 
@@ -67,10 +71,10 @@ class CrawlerThread (threading.Thread):
 
 if __name__ == '__main__':
   crawlers = [
-    crawlers.CinepolisCrawler(),
+    # crawlers.CinepolisCrawler(),
     # crawlers.CineramaCrawler(),
     # crawlers.CinestarCrawler(),
-    # crawlers.CineplanetCrawler(),
+    crawlers.CineplanetCrawler(),
     # crawlers.MovieTimeCrawler(),
     # crawlers.MultiCineJMCrawler(),
     # crawlers.UVKMultiCineCrawler(),
