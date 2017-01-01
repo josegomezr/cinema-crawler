@@ -1,3 +1,5 @@
+[![Build Status](http://drone.josegomezr.me/api/badges/josegomezr/cinema-crawler/status.svg)](http://drone.josegomezr.me/josegomezr/cinema-crawler)
+
 Instalación
 ===========
 
