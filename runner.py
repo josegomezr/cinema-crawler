@@ -46,8 +46,8 @@ class CrawlerThread (threading.Thread):
             movieShowTime = movieJSON['showtimes']
 
             if not result['movies'].get(movieHash):
-              movieJSON['chains'] = {}
-              movieJSON['theaters'] = {}
+              movieJSON['chains'] = []
+              movieJSON['theaters'] = []
               movieJSON['showtimes'] = {}
 
               result['movies'][movieHash] = movieJSON         
@@ -56,11 +56,13 @@ class CrawlerThread (threading.Thread):
 
             damovie['showtimes'][theaterHash] = movieShowTime
 
-            if not chainHash in ['chains']:
-              result['movies'][movieHash]['chains'].append(chainHash)
+            if not chainHash in damovie['chains']:
+              damovie['chains'].append(chainHash)
 
-            if not theaterHash in result['movies'][movieHash]['theaters']:
-              result['movies'][movieHash]['theaters'].append(theaterHash)
+            if not theaterHash in damovie['theaters']:
+              damovie['theaters'].append(theaterHash)
+
+            result['movies'][movieHash] = damovie
 
         Lock.release()
         BusyLock.release()
