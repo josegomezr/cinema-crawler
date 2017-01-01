@@ -71,7 +71,7 @@ class CrawlerThread (threading.Thread):
 if __name__ == '__main__':
 
   try:
-    os.mkdir('/tmp')
+    os.mkdir('./tmp')
   except FileExistsError:
     pass
 
