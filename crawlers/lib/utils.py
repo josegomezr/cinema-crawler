@@ -1,7 +1,7 @@
 import datetime
 import re
 
-re_tag = re.compile(r'\((\w+)\)')
+re_tag = re.compile(r'\((.+)\)')
 
 meses = [None, "enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"]
 
