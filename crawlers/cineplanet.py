@@ -49,6 +49,6 @@ class CineplanetCrawler(base.BaseCrawler):
       for movieSoup in soup.select(".WEB_cineCarteleraDetalle"):
         title = str(movieSoup.select_one('.WEB_cinePeliculaNombre').next).strip()
         showtimes = [ i.text for i in movieSoup.select('.horarioDisponible') ]
-        print (showtimes)
+        # print (showtimes)
 
         theater.addMovie(title, None, showtimes )
