@@ -11,16 +11,14 @@ result = {
 }
 Lock = threading.Lock()
 
-BusyLock = threading.RLock() 
-
 class CrawlerThread (threading.Thread):
     def __init__(self, threadID, instance):
         threading.Thread.__init__(self)
         self.threadID = threadID
         self.instance = instance
+        
     def run(self):
         print ("Starting ", self.threadID)
-        BusyLock.acquire()
         self.instance.getTheaters()
         self.instance.getMovies()
 
@@ -41,13 +39,13 @@ class CrawlerThread (threading.Thread):
         for theater in self.instance.model.theaters:
           theaterHash = hex(hash(theater))
 
-          print(theaterHash, theater.name)
+          # print(theaterHash, theater.name)
 
           result['theaters'][theaterHash] = theater.toJSON(False)
 
           for movie in theater.movies:
             movieHash = hex(hash(movie))
-            print("--", movieHash, movie.name)
+            # print("--", movieHash, movie.name)
             movieJSON = movie.toJSON()
             movieShowTimes = movieJSON['showtimes']
             if not result['movies'].get(movieHash):
@@ -67,19 +65,18 @@ class CrawlerThread (threading.Thread):
             result['movies'][movieHash] = damovie
 
         Lock.release()
-        BusyLock.release()
         print ("Exiting ", self.threadID)
 
 if __name__ == '__main__':
   crawlers = [
-    # crawlers.CinepolisCrawler(),
+    crawlers.CinepolisCrawler(),
     crawlers.CineramaCrawler(),
-    # crawlers.CinestarCrawler(),
-    # crawlers.CineplanetCrawler(),
-    # crawlers.MovieTimeCrawler(),
-    # crawlers.MultiCineJMCrawler(),
-    # crawlers.UVKMultiCineCrawler(),
-    # crawlers.CinemarkCrawler()
+    crawlers.CinestarCrawler(),
+    crawlers.CineplanetCrawler(),
+    crawlers.MovieTimeCrawler(),
+    crawlers.MultiCineJMCrawler(),
+    crawlers.UVKMultiCineCrawler(),
+    crawlers.CinemarkCrawler()
   ]
 
   threads = []
@@ -87,8 +84,8 @@ if __name__ == '__main__':
     th = CrawlerThread(str(crawl.name), crawl)
     threads.append (th)
     th.start()
-
-  BusyLock.acquire()
+  for thread in threads:
+    thread.join()
 
   output = json.dumps(result)
 
@@ -97,21 +94,19 @@ if __name__ == '__main__':
   movieID = 1
 
   for key, chain in result['chains'].items():
-    print(key, chain)
-    output = output.replace(str(key), chainID)
+    # print(key, chain)
+    output = output.replace(key, str(chainID))
     chainID = chainID + 1
 
   for key, theater in result['theaters'].items():
-    print(key, theater)
-    output = output.replace(str(key), theaterID)
+    # print(key, theater)
+    output = output.replace(key, str(theaterID))
     theaterID = theaterID + 1
 
   for key, movie in result['movies'].items():
-    print(key, movie)
-    output = output.replace(str(key), movieID)
+    # print(key, movie)
+    output = output.replace(key, str(movieID))
     movieID = movieID + 1
 
   with open('tmp/result.json', 'w') as f:
     f.write(output)
-
-  BusyLock.release()
