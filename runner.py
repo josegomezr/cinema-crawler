@@ -43,7 +43,7 @@ class CrawlerThread (threading.Thread):
           for movie in theater.movies:
             movieHash = hex((hash(movie))
 
-            if not result['movies'].get(movieHash):
+            if not result['movies'].get(movieHash)):
               movieJSON = movie.toJSON()
               movieJSON['chains'] = [chainHash]
               movieJSON['theaters'] = [theaterHash]
