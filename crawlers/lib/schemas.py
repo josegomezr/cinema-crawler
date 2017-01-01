@@ -32,7 +32,10 @@ class Theater:
     self.storage = storage
 
   def addMovie(self, name, description, showtimes, meta={}):
-    self.movies.append(Movie(name, description, showtimes, **meta))
+    obj = Movie(name, description, showtimes, **meta)
+    obj.theater = hex(hash(self))
+    obj.chain = self.chain
+    self.movies.append(obj)
 
   def __hash__(self):
     return hash((self.chain, self.name.lower()))
@@ -58,7 +61,11 @@ class Movie:
   def toJSON(self):
     return {
       'name': utils.clean_tags_from_title(self.name),
-      'showtimes': [showtime.toJSON() for showtime in self.showtimes],
+      'showtimes': {
+        self.theater: [showtime.toJSON() for showtime in self.showtimes],
+      },
+      'theaters': [],
+      'chains': [],
       'meta': self.meta
     }
 

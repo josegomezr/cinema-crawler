@@ -42,15 +42,9 @@ class CrawlerThread (threading.Thread):
 
           for movie in theater.movies:
             movieHash = hex(hash(movie))
-            movieJSON = movie.toJSON()
-            movieShowTime = movieJSON['showtimes']
 
             if not result['movies'].get(movieHash):
-              movieJSON['chains'] = []
-              movieJSON['theaters'] = []
-              movieJSON['showtimes'] = {}
-
-              result['movies'][movieHash] = movieJSON         
+              result['movies'][movieHash] = movie.toJSON()         
 
             damovie = result['movies'][movieHash]
 
@@ -71,12 +65,12 @@ class CrawlerThread (threading.Thread):
 if __name__ == '__main__':
   crawlers = [
     crawlers.CinepolisCrawler(),
-    crawlers.CineramaCrawler(),
+    # crawlers.CineramaCrawler(),
     crawlers.CinestarCrawler(),
-    crawlers.CineplanetCrawler(),
-    crawlers.MovieTimeCrawler(),
-    crawlers.MultiCineJMCrawler(),
-    crawlers.UVKMultiCineCrawler(),
+    # crawlers.CineplanetCrawler(),
+    # crawlers.MovieTimeCrawler(),
+    # crawlers.MultiCineJMCrawler(),
+    # crawlers.UVKMultiCineCrawler(),
     crawlers.CinemarkCrawler()
   ]
 
