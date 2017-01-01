@@ -69,12 +69,12 @@ if __name__ == '__main__':
   crawlers = [
     crawlers.CinepolisCrawler(),
     # crawlers.CineramaCrawler(),
-    crawlers.CinestarCrawler(),
+    # crawlers.CinestarCrawler(),
     # crawlers.CineplanetCrawler(),
     # crawlers.MovieTimeCrawler(),
     # crawlers.MultiCineJMCrawler(),
     # crawlers.UVKMultiCineCrawler(),
-    crawlers.CinemarkCrawler()
+    # crawlers.CinemarkCrawler()
   ]
 
   threads = []
@@ -92,15 +92,18 @@ if __name__ == '__main__':
   movieID = 1
 
   for key, chain in result['chains'].items():
-    output = output.replace(key, chainID)
+    print(key, chain)
+    output = output.replace(str(key), chainID)
     chainID = chainID + 1
 
   for key, theater in result['theaters'].items():
-    output = output.replace(key, theaterID)
+    print(key, theater)
+    output = output.replace(str(key), theaterID)
     theaterID = theaterID + 1
 
   for key, movie in result['movies'].items():
-    output = output.replace(key, movieID)
+    print(key, movie)
+    output = output.replace(str(key), movieID)
     movieID = movieID + 1
 
   with open('tmp/result.json', 'w') as f:
