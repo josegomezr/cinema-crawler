@@ -91,15 +91,15 @@ if __name__ == '__main__':
   theaterID = 1
   movieID = 1
 
-  for chain in result['chains'].values():
+  for key, chain in result['chains'].items():
     output = output.replace(chain, chainID)
     chainID = chainID + 1
 
-  for theater in result['theaters'].values():
+  for key, theater in result['theaters'].items():
     output = output.replace(theater, theaterID)
     theaterID = theaterID + 1
 
-  for movie in result['movies'].values():
+  for key, movie in result['movies'].items():
     output = output.replace(movie, movieID)
     movieID = movieID + 1
 
