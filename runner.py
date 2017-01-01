@@ -38,7 +38,7 @@ class CrawlerThread (threading.Thread):
           result['theaters'][hash(theater)] = theater.toJSON(False)
 
           for movie in theater.movies:
-            result['movies'][hash(movie)] = movie.toJSON(False)
+            result['movies'][hash(movie)] = movie.toJSON()
 
         Lock.release()
         BusyLock.release()
