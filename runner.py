@@ -32,13 +32,28 @@ class CrawlerThread (threading.Thread):
         
         Lock.acquire()
 
-        result['chains'][hash(self.instance.model)] = self.instance.model.toJSON(False)
+        chainHash = hash(self.instance.model)
+
+        result['chains'][chainHash] = self.instance.model.toJSON(False)
         
         for theater in self.instance.model.theaters:
-          result['theaters'][hash(theater)] = theater.toJSON(False)
+          theaterHash = hash(theater)
+          result['theaters'][theaterHash] = theater.toJSON(False)
 
           for movie in theater.movies:
-            result['movies'][hash(movie)] = movie.toJSON()
+            movieHash = hash(movie)
+
+            if not result['movies'].get(movieHash):
+              movieJSON = movie.toJSON()
+              movieJSON['chains'] = [chainHash]
+              movieJSON['theaters'] = [theaterHash]
+              result['movies'][movieHash] = movieJSON
+            
+            if not chainHash in result['movies'][movieHash]['chains']:
+              result['movies'][movieHash]['chains'].append(chainHash)
+
+            if not theaterHash in result['movies'][movieHash]['theaters']:
+              result['movies'][movieHash]['theaters'].append(theaterHash)
 
         Lock.release()
         BusyLock.release()
@@ -61,7 +76,8 @@ if __name__ == '__main__':
     th = CrawlerThread(str(crawl.name), crawl)
     threads.append (th)
     th.start()
-    th.join()
+
+  BusyLock.acquire()
 
   with open('tmp/result.json', 'w') as f:
     json.dump(result, f)
