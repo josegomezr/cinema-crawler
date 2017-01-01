@@ -42,6 +42,7 @@ class Theater:
 
   def toJSON(self, deep = True):
     obj = {
+      'id' : hex(hash(self)),
       'name': self.name,
       'url': self.url,
       'chain': self.chain
@@ -60,6 +61,7 @@ class Movie:
 
   def toJSON(self):
     return {
+      'id' : hex(hash(self)),
       'name': utils.clean_tags_from_title(self.name),
       'showtimes': [showtime.toJSON() for showtime in self.showtimes],
       'theaters': [],
