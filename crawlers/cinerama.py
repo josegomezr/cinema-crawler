@@ -23,8 +23,8 @@ class CineramaCrawler(base.BaseCrawler):
       self.log('get-movies-for-theater: %s' % theater.name)
       soup = self.urlToBS4(theater.url)
       for movieDetail in soup.select('div.txt-cartelera'):
-        title = movieDetail.select_one('div.titcarte').a.string
-        description = movieDetail.select_one('p').string
-        showtimes = movieDetail.select_one('div.horasprof').string
+        title = str(movieDetail.select_one('div.titcarte').a.string).split('/')[0]
+        description = str(movieDetail.select_one('p').string)
+        showtimes = str(movieDetail.select_one('div.horasprof').string)
         showtimes = [i.strip() for i in showtimes.split('/')]
         theater.addMovie(title, description, showtimes)
