@@ -6,13 +6,23 @@ class Chain:
     self.theaters = []
 
   def addTheater(self, name, url= None, storage=None):
-    self.theaters.append(Theater(name, url, storage))
+    obj = Theater(name, url, storage)
+    obj.chain = hex(hash(self))
+    self.theaters.append(obj)
 
-  def toJSON(self):
-    return {
-      'name': self.name,
-      'theaters': [ theater.toJSON() for theater in self.theaters ]
+  def __hash__(self):
+    return hash(self.name.lower())
+
+  def toJSON(self, deep = True):
+    obj = {
+      'id' : hex(hash(self)),
+      'name': self.name
     }
+    if deep:
+      theaters = [ theater.toJSON() for theater in self.theaters ]
+      obj['theaters'] = theaters
+
+    return obj
 
 class Theater:
   def __init__(self, name, url = None, storage=None):
@@ -24,11 +34,20 @@ class Theater:
   def addMovie(self, name, description, showtimes, meta={}):
     self.movies.append(Movie(name, description, showtimes, **meta))
 
-  def toJSON(self):
-    return {
+  def __hash__(self):
+    return hash((self.chain, self.name.lower()))
+
+  def toJSON(self, deep = True):
+    obj = {
       'name': self.name,
-      'movies': [movie.toJSON() for movie in self.movies]
+      'url': self.url,
+      'chain': self.chain
     }
+
+    if deep:
+      obj['movies'] = [movie.toJSON() for movie in self.movies]
+
+    return obj
 
 class Movie:
   def __init__(self, name, description, showtimes, **kwargs):

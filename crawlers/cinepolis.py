@@ -13,16 +13,16 @@ class CinepolisCrawler(base.BaseCrawler):
 
   def getTheaters(self):
     self.log('get-theaters')
-    # jsonCity = self.doRequest(self.url).json()
-    jsonCity = json.load(open('../test-files/cinepolis-json-1.json'))
+    jsonCity = self.doRequest(self.url).json()
+    # jsonCity = json.load(open('../test-files/cinepolis-json-1.json'))
 
     cinemas = []
 
     for obj in jsonCity:
       payload = {"claveCiudad": obj['Clave'], "esVIP": False}
       url = path.join(self.base_url, 'Cartelera.aspx/GetNowPlayingByCity')
-      # jsonCinemas = self.doRequest(url, method='post', json=payload).json()
-      jsonCinemas = json.load(open('../test-files/cinepolis-json-2.json'))
+      jsonCinemas = self.doRequest(url, method='post', json=payload).json()
+      # jsonCinemas = json.load(open('../test-files/cinepolis-json-2.json'))
       cinemas.extend(jsonCinemas['d']['Cinemas'])
     
     for cinema in cinemas:
