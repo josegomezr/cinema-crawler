@@ -5,6 +5,8 @@ import pickle
 import threading
 import time
 import os
+import shutil
+
 
 result = {
   'chains': {},
@@ -27,11 +29,11 @@ class CrawlerThread (threading.Thread):
         
 
         print ("[%s] Writing pickle dump" % self.threadID)
-        with open('tmp/pickle-%s.dump' % self.threadID, 'wb') as f:
+        with open('tmp/dumps/%s.dump' % self.threadID, 'wb') as f:
           pickle.dump(self.instance.model, f, protocol=4)
         
         print ("[%s] Writing json dump" % self.threadID)
-        with open('tmp/json-%s.json' % self.threadID, 'w') as f:
+        with open('tmp/jsons/%s.json' % self.threadID, 'w') as f:
           json.dump(self.instance.model.toJSON(), f)
         
         print ("[%s] Merging model with root" % self.threadID)
@@ -74,8 +76,12 @@ class CrawlerThread (threading.Thread):
 if __name__ == '__main__':
 
   try:
+    shutil.rmtree('./tmp')
     os.mkdir('./tmp')
-  except FileExistsError:
+    os.mkdir('./tmp/responses')
+    os.mkdir('./tmp/dumps')
+    os.mkdir('./tmp/jsons')
+  except (FileNotFoundError, FileExistsError):
     pass
 
   crawlers = [

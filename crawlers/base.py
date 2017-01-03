@@ -13,7 +13,7 @@ class BaseCrawler(object):
     self.logger = logging.getLogger(self.name)
     self.logger.setLevel(logging.DEBUG)
     
-    handler = logging.FileHandler('./tmp/log-%s.log' % (self.name), mode='a', encoding='utf8')
+    handler = logging.FileHandler('./tmp/%s.log' % (self.name), mode='a', encoding='utf8')
     formatter = logging.Formatter('%(asctime)s [%(levelname)s] %(message)s %(args)s')
 
     handler.setFormatter(formatter)
@@ -42,7 +42,7 @@ class BaseCrawler(object):
     '''This make a bs4 object from a string
     @returns bs4.BeautifulSoup'''
     i = self.request_count
-    open('./tmp/%s_%s_%i.request' % (self.name, datetime.now().strftime("%Y-%m-%dT%H-%I-%S"), i), 'w').write(str(html_doc))
+    open('./tmp/responses/%s_%s_%i.out' % (self.name, datetime.now().strftime("%Y-%m-%dT%H-%I-%S"), i), 'w').write(str(html_doc))
     self.request_count = self.request_count +1
     return BeautifulSoup(html_doc, 'html.parser')
   
