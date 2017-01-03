@@ -20,24 +20,26 @@ class CrawlerThread (threading.Thread):
         self.instance = instance
         
     def run(self):
-        print ("Starting ", self.threadID)
+        print ("[%s] Start" % self.threadID)
         self.instance.getTheaters()
         self.instance.getMovies()
+        print ("[%s] Finish" % self.threadID)
+        
 
+        print ("[%s] Writing pickle dump" % self.threadID)
         with open('tmp/pickle-%s.dump' % self.threadID, 'wb') as f:
           pickle.dump(self.instance.model, f, protocol=4)
         
+        print ("[%s] Writing json dump" % self.threadID)
         with open('tmp/json-%s.json' % self.threadID, 'w') as f:
           json.dump(self.instance.model.toJSON(), f)
         
+        print ("[%s] Merging model with root" % self.threadID)
         Lock.acquire()
 
         chainHash = hex(hash(self.instance.model))
         result['chains'][chainHash] = self.instance.model.toJSON(False)
         
-
-
-
         for theater in self.instance.model.theaters:
           theaterHash = hex(hash(theater))
 
@@ -67,7 +69,7 @@ class CrawlerThread (threading.Thread):
             result['movies'][movieHash] = damovie
 
         Lock.release()
-        print ("Exiting ", self.threadID)
+        print ("[%s] End" % self.threadID)
 
 if __name__ == '__main__':
 
@@ -92,8 +94,10 @@ if __name__ == '__main__':
     th = CrawlerThread(str(crawl.name), crawl)
     threads.append (th)
     th.start()
+
   for thread in threads:
     thread.join()
+    thread.instance.log('END')
 
   output = json.dumps(result)
 
