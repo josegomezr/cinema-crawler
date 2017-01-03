@@ -1,3 +1,4 @@
+# encoding=utf8
 import crawlers
 import json
 import pickle

@@ -1,3 +1,5 @@
+# encoding=utf8
+
 from . import utils
 class Chain:
   def __init__(self, name, url):

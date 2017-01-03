@@ -1,3 +1,5 @@
+# encoding=utf8
+
 from . import base
 from os import path
 from .lib import schemas

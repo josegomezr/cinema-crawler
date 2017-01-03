@@ -1,3 +1,4 @@
+# encoding=utf8
 import unittest
 
 class TestStringMethods(unittest.TestCase):

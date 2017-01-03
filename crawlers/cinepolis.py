@@ -1,8 +1,11 @@
+# encoding=utf8
+
 from . import base
 from os import path
 from .lib import schemas
 from .lib import utils
 import json
+
 
 class CinepolisCrawler(base.BaseCrawler):
   def __init__(self):
