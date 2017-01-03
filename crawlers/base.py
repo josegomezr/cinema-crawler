@@ -12,12 +12,18 @@ class BaseCrawler(object):
     self.request_count = 1
     self.logger = logging.getLogger(self.name)
     self.logger.setLevel(logging.DEBUG)
-    self.logger.addHandler(logging.FileHandler('./tmp/log-%s.log' % (self.name), mode='a', encoding='utf8'))
+    
+    handler = logging.FileHandler('./tmp/log-%s.log' % (self.name), mode='a', encoding='utf8')
+    formatter = logging.Formatter('%(asctime)s [%(levelname)s] %(message)s %(args)s')
+
+    handler.setFormatter(formatter)
+
+    self.logger.addHandler(handler)
     self.logger.debug('init')
 
-  def log(self, msg):
+  def log(self, msg, *args, **kwargs):
     '''@param msg mixed var to log'''
-    self.logger.info(msg)
+    self.logger.info(msg, *args, **kwargs)
 
   def getTheaters():
     '''This will fetch all theaters for a chain'''
@@ -44,7 +50,11 @@ class BaseCrawler(object):
     '''This make an http request and return a 
     @returns requests.Request'''
 
-    self.log('sending-http-request #[%d]\nURL:%s\nARGS:%s\n' % (self.request_count, url, str(kwargs)))
+    self.log('http-request #%(count)d - BEGIN', {
+      'url': url,
+      **kwargs,
+      'count': self.request_count
+    })
 
     retries = 10 # max retries for http request
     method = kwargs.get('method')
@@ -59,10 +69,9 @@ class BaseCrawler(object):
           response = requests.post(url, **kwargs)
         else:
           response = requests.get(url, **kwargs)
-
-        self.log('successful-http-request')
+        self.log('http-request #%d - SUCCESS', self.request_count)
         return response
       except (requests.exceptions.ContentDecodingError, requests.exceptions.ConnectionError):
-        self.log('failed-http-request retrying')
+        self.logger.warning('http-request #%d - FAIL, RETRYING (%d times left)', self.request_count, retries)
         retries = retries -1
     raise Exception("Network Error")
