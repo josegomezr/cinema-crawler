@@ -10,8 +10,8 @@ export default class App extends React.Component {
     
     return <div>
       <NavBar />
-
       <div className="container">
+      {/*}
         <div className="pull-right">
           <Button>
             <Glyphicon glyph="search" />
@@ -20,7 +20,7 @@ export default class App extends React.Component {
         </div>
         <div className="clearfix"></div>
         <br />
-
+      {*/}
         {this.props.children}
       </div>
     </div>

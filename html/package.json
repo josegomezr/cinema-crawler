@@ -18,7 +18,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "build": "browserify -t [ babelify --presets [ react es2015 ] ] src/index.jsx -o bundle.js"
+    "build": "browserify -d -t [ babelify --presets [ react es2015 ] ] src/index.jsx -o bundle.js"
   },
   "author": "",
   "license": "ISC"

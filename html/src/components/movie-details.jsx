@@ -35,35 +35,39 @@ export default class Details extends React.Component {
       return this.state.data.theaters[theaterId]
     });
 
-    let showTimeDetails = _.map(movie.showtimes, (showtime) => {
-      let theater = this.state.data.theaters[showtime.theater];
-      let chain = this.state.data.chains[theater.chain];
+    let showTimeDetails = _.map(movie.showtimes, (theaterShowtime, chainId) => {
+      let chain = this.state.data.chains[chainId];
 
-      let showtimes = showtime.showtime.map((st, i) => {
-        return <span>
-          {i == 0 ? '' : '-'}
-          {" "}
-          <strong>{st}</strong>
-          {" "}
-        </span>
+      let rows = _.map(theaterShowtime, (showtime, theaterId) => {
+        let theater = this.state.data.theaters[theaterId];
+        
+        let showtimes = showtime.showtime.join(' - ');
+
+        return <tr key={movie.id+showtime.theater}>
+          <td>{theater.name}</td>
+          <td>{showtimes}</td>
+        </tr>
       });
 
-
-      return <tr key={movie.id+showtime.theater}>
-        <td>{theater.name}</td>
-        <td>{showtimes}</td>
-      </tr>
+      return <div key={chain.id}>
+        <h3>{chain.name}</h3>
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Sucursal</th>
+              <th>Horas</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows}
+          </tbody>
+        </table>  
+      </div>
     });
 
     return <div>
       <h1>{movie.name}</h1>
-      <table className="table">
-        <tr>
-          <th>Sucursal</th>
-          <th>Horas</th>
-        </tr>
-        {showTimeDetails}
-      </table>
+      {showTimeDetails}
     </div>;
   }
 }
