@@ -132,3 +132,5 @@ if __name__ == '__main__':
 
   with open('tmp/result.json', 'w') as f:
     f.write(output)
+
+  print("--- EXIT --- ")

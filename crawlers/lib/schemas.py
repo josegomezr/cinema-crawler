@@ -72,7 +72,7 @@ class Movie:
     }
 
   def __eq__(self, rhs):
-    return utils.clean_tags_from_title(self.name) == utils.clean_tags_from_title(rhs.name)
+    return hash(self) == hash(rhs)
   
   def __hash__(self):
     return hash(utils.clean_tags_from_title(self.name).lower())
