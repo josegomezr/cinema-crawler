@@ -50,11 +50,10 @@ class BaseCrawler(object):
     '''This make an http request and return a 
     @returns requests.Request'''
 
-    self.log('http-request #%(count)d - BEGIN', {
-      'url': url,
-      **kwargs,
-      'count': self.request_count
-    })
+    kwargs['url'] = url
+    kwargs['count'] = self.request_count
+
+    self.log('http-request #%(count)d - BEGIN', kwargs)
 
     retries = 10 # max retries for http request
     method = kwargs.get('method')
