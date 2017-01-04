@@ -8,3 +8,8 @@ from .multicine_jm import MultiCineJMCrawler
 from .uvk_multicine import UVKMultiCineCrawler
 from .cinemark import CinemarkCrawler
 
+__all__ = (
+  CineramaCrawler, CinepolisCrawler, CinestarCrawler, 
+  CineplanetCrawler, MovieTimeCrawler, MultiCineJMCrawler, 
+  UVKMultiCineCrawler, CinemarkCrawler,
+)
