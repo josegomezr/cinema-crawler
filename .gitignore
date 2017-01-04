@@ -5,3 +5,4 @@ tmp/
 html/node_modules
 html/bundle.js
 html/result.json
+html/*.min.js

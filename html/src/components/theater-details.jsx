@@ -19,7 +19,7 @@ export default class Details extends React.Component {
     }
   }
   componentDidMount() {
-    $.getJSON('./result.json').then( (json) => {
+    $.getJSON(window._url_json).then( (json) => {
       this.setState({
         data: json
       })
