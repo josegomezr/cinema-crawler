@@ -3,6 +3,9 @@ import json
 import os
 import shutil
 import threading
+import collections
+
+recursive_dict = lambda: collections.defaultdict(recursive_dict)
 
 def run_crawler(crawler):
   print ("[%s] Start" % crawler.name)
@@ -36,19 +39,16 @@ def merge_crawler_result(result, crawler):
       movieJSON = movie.toJSON()
       movieShowTimes = movieJSON['showtimes']
       if not result['movies'].get(movieHash):
-        movieJSON['showtimes'] = {}
+        movieJSON['showtimes'] = recursive_dict()
         result['movies'][movieHash] = movieJSON
       damovie = result['movies'][movieHash]
       
-      mergedShowtime = damovie['showtimes'].get(theaterHash, {})
-
-      mergedShowtime.update({
+      damovie['showtimes'][chainHash][theaterHash].update({
         'theater': theaterHash,
+        'chain': chainHash,
         'showtime': movieShowTimes,
         'movie' : damovie['id']
       })
-
-      damovie['showtimes'][theaterHash] = mergedShowtime
 
       if not chainHash in damovie['chains']:
         damovie['chains'].append(chainHash)
