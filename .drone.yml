@@ -1,6 +1,12 @@
 pipeline:
-  python3:
+  python3.5:
     image: python:3.5-alpine
+    commands:
+      - pip3 install -r requirements.txt
+      - python3 -m unittest 
+
+  python3.3:
+    image: python:3.3-alpine
     commands:
       - pip3 install -r requirements.txt
       - python3 -m unittest 
