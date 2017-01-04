@@ -39,7 +39,16 @@ def merge_crawler_result(result, crawler):
         movieJSON['showtimes'] = {}
         result['movies'][movieHash] = movieJSON
       damovie = result['movies'][movieHash]
-      damovie['showtimes'][theaterHash] = movieShowTimes
+      
+      mergedShowtime = damovie['showtimes'].get(theaterHash, {})
+
+      mergedShowtime.update({
+        'theater': theaterHash,
+        'showtime': movieShowTimes,
+        'movie' : damovie['id']
+      })
+
+      damovie['showtimes'][theaterHash] = mergedShowtime
 
       if not chainHash in damovie['chains']:
         damovie['chains'].append(chainHash)
