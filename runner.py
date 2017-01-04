@@ -30,7 +30,7 @@ class CrawlerThread (threading.Thread):
 
         print ("[%s] Writing pickle dump" % self.threadID)
         with open('tmp/dumps/%s.dump' % self.threadID, 'wb') as f:
-          pickle.dump(self.instance.model, f, protocol=4)
+          pickle.dump(self.instance.model, f, protocol=3)
         
         print ("[%s] Writing json dump" % self.threadID)
         with open('tmp/jsons/%s.json' % self.threadID, 'w') as f:
