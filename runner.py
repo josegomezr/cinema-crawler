@@ -77,6 +77,10 @@ if __name__ == '__main__':
 
   try:
     shutil.rmtree('./tmp')
+  except (FileNotFoundError, FileExistsError):
+    pass
+
+  try:
     os.mkdir('./tmp')
     os.mkdir('./tmp/responses')
     os.mkdir('./tmp/dumps')

@@ -13,7 +13,9 @@ class BaseCrawler(object):
     self.logger = logging.getLogger(self.name)
     self.logger.setLevel(logging.DEBUG)
     
-    handler = logging.FileHandler('./tmp/%s.log' % (self.name), mode='a', encoding='utf8')
+    filename = './tmp/%s.log' % (self.name)
+    open(filename, 'w').close()
+    handler = logging.FileHandler(filename, mode='a', encoding='utf8')
     formatter = logging.Formatter('%(asctime)s [%(levelname)s] %(message)s %(args)s')
 
     handler.setFormatter(formatter)
@@ -50,10 +52,11 @@ class BaseCrawler(object):
     '''This make an http request and return a 
     @returns requests.Request'''
 
-    kwargs['url'] = url
-    kwargs['count'] = self.request_count
+    opts = dict(kwargs)
+    opts['url'] = url
+    opts ['count'] = self.request_count
 
-    self.log('http-request #%(count)d - BEGIN', kwargs)
+    self.log('http-request #%(count)d - BEGIN', opts )
 
     retries = 10 # max retries for http request
     method = kwargs.get('method')
