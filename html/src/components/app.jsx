@@ -7,20 +7,9 @@ import {Button, Glyphicon} from 'react-bootstrap';
 export default class App extends React.Component {
   
   render(){
-    
-    return <div>
+    return <div className="app-element">
       <NavBar />
       <div className="container">
-      {/*}
-        <div className="pull-right">
-          <Button>
-            <Glyphicon glyph="search" />
-            Buscar
-          </Button>
-        </div>
-        <div className="clearfix"></div>
-        <br />
-      {*/}
         {this.props.children}
       </div>
     </div>

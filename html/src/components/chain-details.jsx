@@ -33,7 +33,7 @@ export default class Details extends React.Component {
     var theaters = _.filter(this.state.data.theaters, (theater) => {
       return theater.chain == chain.id
     }).map((theater) => {
-      return <Col xs={12} md={4} key={theater.id}>
+      return <Col xs={12} md={4} key={theater.id} className="chain-details-element-theater-col">
         <strong>{theater.name}</strong>
         <br />
         <Link to={`/theater/${theater.id}`} className="btn btn-default">Ver Cartelera</Link>
@@ -43,10 +43,10 @@ export default class Details extends React.Component {
     let n_clearfixes = Math.ceil(theaters.length / 3);
 
     for (var i = 0; i < n_clearfixes; i++) {
-      theaters.splice(i*4, 0, <Clearfix />);
+      theaters.splice(i*4, 0, <Clearfix key={Math.random()} />);
     }
 
-    return <Grid>
+    return <div className="chain-details-element">
       <Row>
         <Col xs={12}>
           <h3>{chain.name}</h3>
@@ -55,7 +55,6 @@ export default class Details extends React.Component {
       <Row>
         {theaters}
       </Row>
-        
-    </Grid>
+    </div>
   };
 }

@@ -51,7 +51,7 @@ export default class Details extends React.Component {
 
       return <div key={chain.id}>
         <h3>{chain.name}</h3>
-        <table className="table">
+        <table className="table movie-details-element-table">
           <thead>
             <tr>
               <th>Sucursal</th>
@@ -60,12 +60,12 @@ export default class Details extends React.Component {
           </thead>
           <tbody>
             {rows}
-          </tbody>
+        </tbody>
         </table>  
       </div>
     });
 
-    return <div>
+    return <div className="movie-details-element">
       <h1>{movie.name}</h1>
       {showTimeDetails}
     </div>;

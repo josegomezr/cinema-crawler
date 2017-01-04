@@ -32,9 +32,9 @@ export default class Main extends React.Component {
       </Link>
     }).value();
 
-    return <div>
+    return <div className="main-element">
       <h1>Cartelera</h1>
-      <div className="list-group" id="main-movie-list">
+      <div className="list-group" id="main-element-movie-list">
         {movies}
       </div>
     </div>

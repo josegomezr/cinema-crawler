@@ -42,12 +42,12 @@ export default class Details extends React.Component {
     var movieTpl = (<p>Esta sucursal no tiene películas para hoy.</p>);
 
     if (movies.length > 0) {
-      movieTpl = <div className="list-group" id="main-movie-list">
+      movieTpl = <div className="list-group" id="theater-details-element-movie-list">
         {movies}
       </div>
     }
 
-    return <Grid>
+    return <div className="theater-details-element">
       <Row>
         <Col xs={12}>
           <h3>{theater.name}</h3>
@@ -59,6 +59,6 @@ export default class Details extends React.Component {
         </Col>
       </Row>
         
-    </Grid>
+    </div>
   };
 }

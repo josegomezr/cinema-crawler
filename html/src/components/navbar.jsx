@@ -33,7 +33,7 @@ export default class NavBar extends React.Component {
       </LinkContainer>
     })
 
-    return <div>
+    return <div className="navbar-element">
       <Navbar inverse collapseOnSelect staticTop>
         <Navbar.Header>
           <Navbar.Brand>
