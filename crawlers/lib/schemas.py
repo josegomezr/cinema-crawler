@@ -1,6 +1,8 @@
 # encoding=utf8
 
 from . import utils
+import Levenshtein
+
 class Chain:
   def __init__(self, name, url):
     self.name = name
@@ -72,10 +74,22 @@ class Movie:
     }
 
   def __eq__(self, rhs):
-    return hash(self) == hash(rhs)
+    name1 = self.get_normalized_name()
+    name2 = rhs.get_normalized_name()
+
+    ratio = Levenshtein.ratio(name1, name2)
+    return ratio >= 0.8
+    # return hash(self) == hash(rhs)
   
+  def get_normalized_name(self):
+    name = utils.clean_accented_chars(self.name)
+    name = utils.clean_tags_from_title(name).lower()
+    name = utils.clean_articles(name)
+    name = utils.clean_symbols(name)
+    return name
+    
   def __hash__(self):
-    return hash(utils.clean_tags_from_title(self.name).lower())
+    return hash(self.get_normalized_name())
 
 class ShowTime:
   def __init__(self, showtime):

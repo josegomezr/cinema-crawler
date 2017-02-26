@@ -17,20 +17,26 @@ export default class Main extends React.Component {
     }
   }
   componentDidMount() {
-    $.getJSON('./result.json').then( (json) => {
+    $.getJSON(window._url_json).then( (json) => {
       this.setState({
         data: json
       })
     })   
   }
   render(){
-    let movies = _.map(this.state.data.movies, (movie) => {
-      return <Link to={`/details/${movie.id}`} className="list-group-item" key={movie.id}>
+    let movies = _(this.state.data.movies).map((movie) => {
+      return movie;
+    }).sortBy('name').map( (movie) => {
+      return <Link to={`/movie/${movie.id}`} className="list-group-item" key={movie.id}>
         {movie.name}
       </Link>
-    });
-    return <div className="list-group" id="main-movie-list">
-      {movies}
+    }).value();
+
+    return <div className="main-element">
+      <h1>Cartelera</h1>
+      <div className="list-group" id="main-element-movie-list">
+        {movies}
+      </div>
     </div>
   }
 }

@@ -3,4 +3,6 @@ __pycache__/
 *.log
 tmp/
 html/node_modules
-html/node_modules/bundle.js
+html/bundle.js
+html/result.json
+html/*.min.js

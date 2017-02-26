@@ -72,8 +72,14 @@ class BaseCrawler(object):
         else:
           response = requests.get(url, **kwargs)
         self.log('http-request #%d - SUCCESS', self.request_count)
+        response.encoding = 'UTF-8'
+        if 'Internal Server Error' in response.text:
+          raise RuntimeError("DOWN!")
         return response
       except (requests.exceptions.ContentDecodingError, requests.exceptions.ConnectionError):
         self.logger.warning('http-request #%d - FAIL, RETRYING (%d times left)', self.request_count, retries)
+        retries = retries -1
+      except RuntimeError:
+        self.logger.warning('http-request #%d - FAIL, ERROR 500, RETRYING (%d times left)', self.request_count, retries)
         retries = retries -1
     raise Exception("Network Error")

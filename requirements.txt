@@ -1,4 +1,5 @@
 beautifulsoup4==4.4.1
 requests==2.12.4
 html5lib==1.0b3
+python-Levenshtein>=0.10
 peewee==2.8.7
